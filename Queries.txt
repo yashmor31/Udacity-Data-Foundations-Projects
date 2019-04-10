@@ -1,0 +1,62 @@
+
+/*Query 1-Expenses paid by different countries in Metal Genre*/	
+SELECT
+  c.Country,
+  g.Name,
+   Sum(il.quantity*il.unitprice)  AS expenses
+FROM Customer c
+JOIN Invoice i
+  ON i.CustomerId = c.CustomerId
+JOIN InvoiceLine il
+  ON il.InvoiceId = i.InvoiceId
+JOIN Track t
+  ON t.TrackId = il.TrackId
+JOIN Genre g
+  ON g.GenreId = t.GenreId
+ where g.name = "Metal"
+GROUP BY c.Country
+ORDER BY expenses ASC;
+
+
+
+/*Query 2-: How many songs do artists have in Metal Genre?*/
+
+SELECT  A.Name, COUNT(T.TrackId) AS No_of_Songs
+FROM Artist A
+JOIN Album AL
+ON A.ArtistId = AL.ArtistId
+JOIN Track T
+ON AL.AlbumId = T.AlbumId
+JOIN Genre G
+ON T.GenreId = G.GenreId
+where g.name="Metal"
+GROUP BY a.name
+ORDER BY No_of_Songs DESC
+LIMIT 10 ;
+
+	
+/*Query 3- Who are the top 10 money earning artists?*/
+	
+SELECT A.name, SUM(IL.UnitPrice * IL.Quantity) AS MoneyEarned
+FROM Artist A
+JOIN Album AL
+ON A.ArtistId = AL.ArtistId
+JOIN Track T
+ON AL.AlbumId = T.AlbumId
+JOIN InvoiceLine IL
+ON T.TrackId = IL.TrackId
+GROUP BY A.Name
+ORDER BY MoneyEarned DESC 
+Limit 10;
+
+/*Query 4-Which artist to be invited among top 5 best artists.*/
+
+
+SELECT A.name , COUNT(T.Trackid) Songs 
+FROM Artist A 
+JOIN Album AL ON A.ArtistId = AL.ArtistId 
+JOIN Track T ON T.AlbumId = AL.AlbumId 
+GROUP BY A.name 
+ORDER BY Songs DESC ;
+
+
